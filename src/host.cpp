@@ -46,8 +46,8 @@ typedef std::chrono::system_clock SClock;
 #include <thread>
 #include <sstream>
 
-#define NUM_CU 4
-#define NBUFFER 8
+#define NUM_CU 3
+#define NBUFFER 128
 
 #define STRINGIFY2(var) #var
 #define STRINGIFY(var) STRINGIFY2(var)
@@ -399,7 +399,22 @@ int main(int argc, char** argv)
     fpga.program = tmp_program;
 
     for (int ib = 0; ib < NBUFFER; ib++) {
-        for (int i = 0; i < NUM_CU; i++) {
+        if (NUM_CU > 1) {
+            for (int i = 0; i < NUM_CU; i++) {
+                std::string cu_id = std::to_string(i);
+                std::string krnl_name_full =
+                    "alveo_hls4ml:{alveo_hls4ml_" + cu_id + "}";
+                printf("Creating a kernel [%s] for CU(%d)\n",
+                       krnl_name_full.c_str(),
+                       i);
+                //Here Kernel object is created by specifying kernel name along with compute unit.
+                //For such case, this kernel object can only access the specific Compute unit
+                cl::Kernel krnl_tmp = cl::Kernel(
+                       fpga.program, krnl_name_full.c_str(), &fpga.err);
+                fpga.krnl_xil.push_back(krnl_tmp);
+            }
+        } else {
+            int i = 1;
             std::string cu_id = std::to_string(i);
             std::string krnl_name_full =
                 "alveo_hls4ml:{alveo_hls4ml_" + cu_id + "}";
@@ -465,7 +480,7 @@ int main(int argc, char** argv)
     }
 
     auto ts0 = SClock::now();
-    print_nanoseconds("      begin:  ",ts0, 0);
+    //print_nanoseconds("      begin:  ",ts0, 0);
 
     fpga.ithr = 0;
     std::thread th0(FPGA, std::ref(fpga));
@@ -486,7 +501,7 @@ int main(int argc, char** argv)
     th7.join();
     //FPGA(std::ref(fpga));
     auto ts4 = SClock::now();
-    print_nanoseconds("       done:  ",ts4, 0);
+    //print_nanoseconds("       done:  ",ts4, 0);
 
     for (int i = 0 ; i < NUM_CU ; i++){
         OCL_CHECK(fpga.err, fpga.err = fpga.q[i].flush());
@@ -494,8 +509,9 @@ int main(int argc, char** argv)
     }
 // OPENCL HOST CODE AREA END
     auto ts5 = SClock::now();
-    print_nanoseconds("       end:   ",ts5, 0);
-    std::cout << fpga.ss.str();
+    //print_nanoseconds("       end:   ",ts5, 0);
+    std::cout << "Throughput = "<< (float(nevents*8)/float(std::chrono::duration_cast<std::chrono::nanoseconds>(ts5-ts0).count()))*1000000000.<<" events/s"<<std::endl;
+    //std::cout << fpga.ss.str();
 
     return EXIT_SUCCESS;
 }

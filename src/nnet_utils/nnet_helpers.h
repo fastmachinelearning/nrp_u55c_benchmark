@@ -25,6 +25,7 @@
 #include <math.h>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "hls_stream.h"
 
 namespace nnet {
