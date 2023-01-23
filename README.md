@@ -4,18 +4,16 @@ Setup tools, licenses, check connection to FPGA card
 
 Check out packages
 ```bash
-# check out hls4ml_c SDAccel project
-git clone https://github.com/drankincms/hls4ml_c -b hcal_model_aws
+# check out VitisAccel project
+git clone https://github.com/fastmachinelearning/nrp_u55c_benchmark
 ```
-Compile SDAccel project
+Compile VitisAccel project
 ```bash
-cd hls4ml_c
-make check TARGETS=sw_emu DEVICES=$AWS_PLATFORM all # software emulation
-make check TARGETS=hw_emu DEVICES=$AWS_PLATFORM all # hardware emulation
-make TARGETS=hw DEVICES=$AWS_PLATFORM all # build
+cd nrp_u55c_benchmark
+LD_PRELOAD=/lib/x86_64-linux-gnu/libudev.so.1 make all TARGET=hw  DEVICE=xilinx_u55c_gen3x16_xdma_3_202210_1
 ```
 
 Run project
 ```bash
-./host 
+./host build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml.xclbin 1000
 ```
