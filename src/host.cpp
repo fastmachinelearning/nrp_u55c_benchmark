@@ -46,11 +46,21 @@ typedef std::chrono::system_clock SClock;
 #include <thread>
 #include <sstream>
 
-#define NUM_CU 3
-#define NBUFFER 128
+#define NUM_CU 4
+#define NBUFFER 8
 
 #define STRINGIFY2(var) #var
 #define STRINGIFY(var) STRINGIFY2(var)
+
+// HBM Pseudo-channel(PC) requirements
+#define MAX_HBM_PC_COUNT 32
+#define PC_NAME(n) n | XCL_MEM_TOPOLOGY
+const int pc[MAX_HBM_PC_COUNT] = {
+    PC_NAME(0),  PC_NAME(1),  PC_NAME(2),  PC_NAME(3),  PC_NAME(4),  PC_NAME(5),  PC_NAME(6),  PC_NAME(7),
+    PC_NAME(8),  PC_NAME(9),  PC_NAME(10), PC_NAME(11), PC_NAME(12), PC_NAME(13), PC_NAME(14), PC_NAME(15),
+    PC_NAME(16), PC_NAME(17), PC_NAME(18), PC_NAME(19), PC_NAME(20), PC_NAME(21), PC_NAME(22), PC_NAME(23),
+    PC_NAME(24), PC_NAME(25), PC_NAME(26), PC_NAME(27), PC_NAME(28), PC_NAME(29), PC_NAME(30), PC_NAME(31)};
+
 
 void print_nanoseconds(std::string prefix, std::chrono::time_point<std::chrono::system_clock> now, int ik) {
     auto duration = now.time_since_epoch();
@@ -185,6 +195,8 @@ class fpgaObj {
     std::vector<std::vector<cl::Event>>   writeList;
     std::vector<std::vector<cl::Event>>   kernList;
     std::vector<std::vector<cl::Event>>   readList;
+    std::vector<cl_mem_ext_ptr_t> buf_in_ext;
+    std::vector<cl_mem_ext_ptr_t> buf_out_ext;
     std::vector<cl::Buffer> buffer_in;
     std::vector<cl::Buffer> buffer_out;
     std::vector<cl::Event>   write_event;
@@ -429,6 +441,28 @@ int main(int argc, char** argv)
         }
     }
 
+
+    // For Allocating Buffer to specific Global Memory PC, user has to use
+    // cl_mem_ext_ptr_t
+    // and provide the PCs
+    for (int ib = 0; ib < NBUFFER; ib++) {
+        for (int ik = 0; ik < NUM_CU; ik++) {
+            cl_mem_ext_ptr_t buf_in_ext_tmp;
+            buf_in_ext_tmp.obj = fpga.source_in.data()+((ib*NUM_CU+ik) * STREAMSIZE);
+            buf_in_ext_tmp.param = 0;
+            buf_in_ext_tmp.flags = pc[(ik * 2 * 4)] | pc[(ik * 2 * 4) + 1] | pc[(ik * 2 * 4) + 2] | pc[(ik * 2 * 4) + 3];
+            //buf_in_ext_tmp.flags = pc[(ik * 2)];
+            fpga.buf_in_ext.push_back(buf_in_ext_tmp);
+
+            cl_mem_ext_ptr_t buf_out_ext_tmp;
+            buf_out_ext_tmp.obj = fpga.source_hw_results.data()+((ib*NUM_CU+ik) * COMPSTREAMSIZE);
+            buf_out_ext_tmp.param = 0;
+            buf_out_ext_tmp.flags = pc[(ik * 2 * 4) + 4] | pc[(ik * 2 * 4) + 5] | pc[(ik * 2 * 4) + 6] | pc[(ik * 2 * 4) + 7];
+            //buf_out_ext_tmp.flags = pc[(ik * 2) + 1];
+            fpga.buf_out_ext.push_back(buf_out_ext_tmp);
+        }
+    }
+
     // Allocate Buffer in Global Memory
     // Buffers are allocated using CL_MEM_USE_HOST_PTR for efficient memory and 
     // Device-to-host communication
@@ -438,8 +472,10 @@ int main(int argc, char** argv)
     fpga.readList.reserve(NUM_CU*NBUFFER);
     for (int ib = 0; ib < NBUFFER; ib++) {
         for (int ik = 0; ik < NUM_CU; ik++) {
-            cl::Buffer buffer_in_tmp    (context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY,   vector_size_in_bytes, fpga.source_in.data()+((ib*NUM_CU+ik) * STREAMSIZE));
-            cl::Buffer buffer_out_tmp(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, vector_size_out_bytes, fpga.source_hw_results.data()+((ib*NUM_CU+ik) * COMPSTREAMSIZE));
+            //cl::Buffer buffer_in_tmp    (context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY,   vector_size_in_bytes, fpga.source_in.data()+((ib*NUM_CU+ik) * STREAMSIZE));
+            //cl::Buffer buffer_out_tmp(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, vector_size_out_bytes, fpga.source_hw_results.data()+((ib*NUM_CU+ik) * COMPSTREAMSIZE));
+            cl::Buffer buffer_in_tmp    (context, CL_MEM_USE_HOST_PTR | CL_MEM_EXT_PTR_XILINX | CL_MEM_READ_ONLY,   vector_size_in_bytes, &(fpga.buf_in_ext[ib*NUM_CU+ik]));
+            cl::Buffer buffer_out_tmp(context,CL_MEM_USE_HOST_PTR | CL_MEM_EXT_PTR_XILINX | CL_MEM_WRITE_ONLY, vector_size_out_bytes, &(fpga.buf_out_ext[ib*NUM_CU+ik]));
             fpga.buffer_in.push_back(buffer_in_tmp);
             fpga.buffer_out.push_back(buffer_out_tmp);
         
