@@ -17,8 +17,8 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef EREG_V1_H_
-#define EREG_V1_H_
+#ifndef MYPROJECT_H_
+#define MYPROJECT_H_
 
 #include "ap_int.h"
 #include "ap_fixed.h"
@@ -28,7 +28,7 @@
 
 
 // Prototype of top level function for C-synthesis
-void ereg_v1(
+void myproject(
      hls::stream<input_t> &input_conv_input,
      hls::stream<result_t> &layer38_out
 );

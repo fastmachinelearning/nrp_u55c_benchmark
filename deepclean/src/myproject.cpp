@@ -18,10 +18,10 @@
 //
 #include <iostream>
 
-#include "ereg_v1.h"
+#include "myproject.h"
 #include "parameters.h"
 
-void ereg_v1(
+void myproject(
     hls::stream<input_t> &input_conv_input,
     hls::stream<result_t> &layer38_out
 
