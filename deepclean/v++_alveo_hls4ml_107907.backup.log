@@ -1,0 +1,28 @@
+INFO: [v++ 60-1306] Additional information associated with this v++ compile can be found at:
+	Reports: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/reports/alveo_hls4ml
+	Log files: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/logs/alveo_hls4ml
+WARNING: [v++ 60-2441] The option '--advanced.prop solution.hls_pre_tcl' is being deprecated. Please use '--hls.pre_tcl' option instead
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml.xo.compile_summary, at Tue Feb 28 20:31:40 2023
+INFO: [v++ 60-1315] Creating rulecheck session with output '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/reports/alveo_hls4ml/v++_compile_alveo_hls4ml_guidance.html', at Tue Feb 28 20:31:40 2023
+INFO: [v++ 60-895]   Target platform: /opt/xilinx/platforms/xilinx_u55c_gen3x16_xdma_3_202210_1/xilinx_u55c_gen3x16_xdma_3_202210_1.xpfm
+INFO: [v++ 60-1578]   This platform contains Xilinx Shell Archive '/opt/xilinx/platforms/xilinx_u55c_gen3x16_xdma_3_202210_1/hw/hw.xsa'
+INFO: [v++ 74-78] Compiler Version string: 2022.2
+INFO: [v++ 60-585] Compiling for hardware target
+INFO: [v++ 60-423]   Target device: xilinx_u55c_gen3x16_xdma_3_202210_1
+INFO: [v++ 60-242] Creating kernel: 'alveo_hls4ml'
+
+===>The following messages were generated while  performing high-level synthesis for kernel: alveo_hls4ml Log file: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml/alveo_hls4ml/vitis_hls.log :
+INFO: [v++ 204-61] Pipelining loop 'VITIS_LOOP_87_2'.
+INFO: [v++ 200-1470] Pipelining result : Target II = NA, Final II = 21, Depth = 23, loop 'VITIS_LOOP_87_2'
+INFO: [v++ 204-61] Pipelining loop 'VITIS_LOOP_99_4'.
+INFO: [v++ 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'VITIS_LOOP_99_4'
+INFO: [v++ 204-61] Pipelining loop 'VITIS_LOOP_107_6'.
+INFO: [v++ 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 3, loop 'VITIS_LOOP_107_6'
+ERROR: [v++ 206-102] Illegal connection is found on FIFO pin 'Loop_VITIS_LOOP_87_2_proc1|in_stream1' connecting to 'call_ln87'('Loop_VITIS_LOOP_87_2_proc1_Pipeline_VITIS_LOOP_87_2|in_stream1').
+ERROR: [v++ 200-103] RTL generation terminated by exceptions!
+ERROR: [v++ 60-300] Failed to build kernel(ip) alveo_hls4ml, see log for details: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml/alveo_hls4ml/vitis_hls.log
+ERROR: [v++ 60-773] In '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml/alveo_hls4ml/vitis_hls.log', caught Tcl error: ERROR: [RTGEN 206-102] Illegal connection is found on FIFO pin 'Loop_VITIS_LOOP_87_2_proc1|in_stream1' connecting to 'call_ln87'('Loop_VITIS_LOOP_87_2_proc1_Pipeline_VITIS_LOOP_87_2|in_stream1').
+ERROR: [v++ 60-773] In '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml/alveo_hls4ml/vitis_hls.log', caught Tcl error: ERROR: [HLS 200-103] RTL generation terminated by exceptions!
+ERROR: [v++ 60-599] Kernel compilation failed to complete
+ERROR: [v++ 60-592] Failed to finish compilation
+INFO: [v++ 60-1653] Closing dispatch client.

@@ -1,0 +1,209 @@
+INFO: [v++ 60-1306] Additional information associated with this v++ link can be found at:
+	Reports: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/reports/link
+	Log files: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/logs/link
+WARNING: [v++ 60-2441] The option '--advanced.prop solution.hls_pre_tcl' is being deprecated. Please use '--hls.pre_tcl' option instead
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml.xclbin.link_summary, at Tue Feb 28 21:26:34 2023
+INFO: [v++ 60-1315] Creating rulecheck session with output '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/reports/link/v++_link_alveo_hls4ml_guidance.html', at Tue Feb 28 21:26:34 2023
+INFO: [v++ 60-895]   Target platform: /opt/xilinx/platforms/xilinx_u55c_gen3x16_xdma_3_202210_1/xilinx_u55c_gen3x16_xdma_3_202210_1.xpfm
+INFO: [v++ 60-1578]   This platform contains Xilinx Shell Archive '/opt/xilinx/platforms/xilinx_u55c_gen3x16_xdma_3_202210_1/hw/hw.xsa'
+INFO: [v++ 74-78] Compiler Version string: 2022.2
+INFO: [v++ 60-629] Linking for hardware target
+INFO: [v++ 60-423]   Target device: xilinx_u55c_gen3x16_xdma_3_202210_1
+INFO: [v++ 60-1332] Run 'run_link' status: Not started
+INFO: [v++ 60-1443] [21:26:39] Run run_link: Step system_link: Started
+INFO: [v++ 60-1453] Command Line: system_link --normalize_default_memory_banks --xo /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml.xo -keep --config /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/syslinkConfig.ini --xpfm /opt/xilinx/platforms/xilinx_u55c_gen3x16_xdma_3_202210_1/xilinx_u55c_gen3x16_xdma_3_202210_1.xpfm --target hw --output_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int --temp_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link
+INFO: [v++ 60-1454] Run Directory: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/run_link
+INFO: [SYSTEM_LINK 82-70] Extracting xo v3 file /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/_x.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/alveo_hls4ml.xo
+INFO: [SYSTEM_LINK 82-53] Creating IP database /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/_sysl/.cdb/xd_ip_db.xml
+INFO: [SYSTEM_LINK 82-38] [21:26:43] build_xd_ip_db started: /tools/Xilinx/Vitis/2022.2/bin/build_xd_ip_db -ip_search 0  -sds-pf /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/hw.hpfm -clkid 0 -ip /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/iprepo/xilinx_com_hls_alveo_hls4ml_1_0,alveo_hls4ml -o /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/_sysl/.cdb/xd_ip_db.xml
+INFO: [SYSTEM_LINK 82-37] [21:26:47] build_xd_ip_db finished successfully
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 429.328 ; gain = 0.000 ; free physical = 951911 ; free virtual = 969202
+INFO: [SYSTEM_LINK 82-51] Create system connectivity graph
+INFO: [SYSTEM_LINK 82-102] Applying explicit connections to the system connectivity graph: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/cfgraph/cfgen_cfgraph.xml
+INFO: [SYSTEM_LINK 82-38] [21:26:47] cfgen started: /tools/Xilinx/Vitis/2022.2/bin/cfgen  -nk alveo_hls4ml:3:alveo_hls4ml_0,alveo_hls4ml_1,alveo_hls4ml_2 -slr alveo_hls4ml_0:SLR0 -slr alveo_hls4ml_1:SLR1 -slr alveo_hls4ml_2:SLR2 -dpa_mem_offload false -dmclkid 0 -r /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/_sysl/.cdb/xd_ip_db.xml -o /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/cfgraph/cfgen_cfgraph.xml
+INFO: [CFGEN 83-0] Kernel Specs: 
+INFO: [CFGEN 83-0]   kernel: alveo_hls4ml, num: 3  {alveo_hls4ml_0 alveo_hls4ml_1 alveo_hls4ml_2}
+INFO: [CFGEN 83-0] SLR Specs: 
+INFO: [CFGEN 83-0]   instance: alveo_hls4ml_0, SLR: SLR0
+INFO: [CFGEN 83-0]   instance: alveo_hls4ml_1, SLR: SLR1
+INFO: [CFGEN 83-0]   instance: alveo_hls4ml_2, SLR: SLR2
+INFO: [CFGEN 83-2226] Inferring mapping for argument alveo_hls4ml_0.in to HBM[0]
+INFO: [CFGEN 83-2226] Inferring mapping for argument alveo_hls4ml_0.out to HBM[10]
+INFO: [CFGEN 83-2226] Inferring mapping for argument alveo_hls4ml_1.in to HBM[11]
+INFO: [CFGEN 83-2226] Inferring mapping for argument alveo_hls4ml_1.out to HBM[12]
+INFO: [CFGEN 83-2226] Inferring mapping for argument alveo_hls4ml_2.in to HBM[13]
+INFO: [CFGEN 83-2226] Inferring mapping for argument alveo_hls4ml_2.out to HBM[14]
+INFO: [SYSTEM_LINK 82-37] [21:26:58] cfgen finished successfully
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 429.328 ; gain = 0.000 ; free physical = 951904 ; free virtual = 969196
+INFO: [SYSTEM_LINK 82-52] Create top-level block diagram
+INFO: [SYSTEM_LINK 82-38] [21:26:58] cf2bd started: /tools/Xilinx/Vitis/2022.2/bin/cf2bd  --linux --trace_buffer 1024 --input_file /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/cfgraph/cfgen_cfgraph.xml --ip_db /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/_sysl/.cdb/xd_ip_db.xml --cf_name dr --working_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/_sysl/.xsd --temp_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link --output_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int --target_bd ulp.bd
+INFO: [CF2BD 82-31] Launching cf2xd: cf2xd -linux -trace-buffer 1024 -i /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/cfgraph/cfgen_cfgraph.xml -r /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/_sysl/.cdb/xd_ip_db.xml -o dr.xml
+INFO: [CF2BD 82-28] cf2xd finished successfully
+INFO: [CF2BD 82-31] Launching cf_xsd: cf_xsd -disable-address-gen -bd ulp.bd -dn dr -dp /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/sys_link/_sysl/.xsd
+INFO: [CF2BD 82-28] cf_xsd finished successfully
+INFO: [SYSTEM_LINK 82-37] [21:27:03] cf2bd finished successfully
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 429.328 ; gain = 0.000 ; free physical = 951892 ; free virtual = 969189
+INFO: [v++ 60-1441] [21:27:03] Run run_link: Step system_link: Completed
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 435.156 ; gain = 0.000 ; free physical = 951971 ; free virtual = 969268
+INFO: [v++ 60-1443] [21:27:03] Run run_link: Step cf2sw: Started
+INFO: [v++ 60-1453] Command Line: cf2sw -sdsl /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/sdsl.dat -rtd /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/cf2sw.rtd -nofilter /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/cf2sw_full.rtd -xclbin /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/xclbin_orig.xml -o /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/xclbin_orig.1.xml
+INFO: [v++ 60-1454] Run Directory: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/run_link
+INFO: [v++ 60-1441] [21:27:09] Run run_link: Step cf2sw: Completed
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 435.156 ; gain = 0.000 ; free physical = 951972 ; free virtual = 969270
+INFO: [v++ 60-1443] [21:27:09] Run run_link: Step rtd2_system_diagram: Started
+INFO: [v++ 60-1453] Command Line: rtd2SystemDiagram
+INFO: [v++ 60-1454] Run Directory: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/run_link
+INFO: [v++ 60-1441] [21:27:10] Run run_link: Step rtd2_system_diagram: Completed
+Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.36 . Memory (MB): peak = 435.156 ; gain = 0.000 ; free physical = 951948 ; free virtual = 969246
+INFO: [v++ 60-1443] [21:27:10] Run run_link: Step vpl: Started
+INFO: [v++ 60-1453] Command Line: vpl -t hw -f xilinx_u55c_gen3x16_xdma_3_202210_1 -s --remote_ip_cache /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/.ipcache --output_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int --log_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/logs/link --report_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/reports/link --config /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/vplConfig.ini -k /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/kernel_info.dat --webtalk_flag Vitis --temp_dir /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link --no-info --iprepo /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/xo/ip_repo/xilinx_com_hls_alveo_hls4ml_1_0 --messageDb /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/run_link/vpl.pb /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/dr.bd.tcl
+INFO: [v++ 60-1454] Run Directory: /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/run_link
+
+****** vpl v2022.2 (64-bit)
+  **** SW Build 3671529 on 2022-10-13-17:52:11
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+INFO: [VPL 60-839] Read in kernel information from file '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/int/kernel_info.dat'.
+INFO: [VPL 74-78] Compiler Version string: 2022.2
+INFO: [VPL 60-423]   Target device: xilinx_u55c_gen3x16_xdma_3_202210_1
+INFO: [VPL 60-1032] Extracting hardware platform to /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/vivado/vpl/.local/hw_platform
+[21:27:22] Run vpl: Step create_project: Started
+Creating Vivado project.
+[21:27:38] Run vpl: Step create_project: Completed
+[21:27:38] Run vpl: Step create_bd: Started
+[21:28:09] Run vpl: Step create_bd: Completed
+[21:28:09] Run vpl: Step update_bd: Started
+[21:28:10] Run vpl: Step update_bd: Completed
+[21:28:10] Run vpl: Step generate_target: Started
+[21:29:14] Run vpl: Step generate_target: Completed
+[21:29:14] Run vpl: Step config_hw_runs: Started
+[21:30:30] Run vpl: Step config_hw_runs: RUNNING...
+[21:31:45] Run vpl: Step config_hw_runs: RUNNING...
+[21:32:04] Run vpl: Step config_hw_runs: Completed
+[21:32:04] Run vpl: Step synth: Started
+[21:33:05] Block-level synthesis in progress, 0 of 160 jobs complete, 8 jobs running.
+[21:33:35] Block-level synthesis in progress, 0 of 160 jobs complete, 8 jobs running.
+[21:34:06] Block-level synthesis in progress, 0 of 160 jobs complete, 8 jobs running.
+[21:34:36] Block-level synthesis in progress, 3 of 160 jobs complete, 5 jobs running.
+[21:35:06] Block-level synthesis in progress, 11 of 160 jobs complete, 0 jobs running.
+[21:35:36] Block-level synthesis in progress, 14 of 160 jobs complete, 6 jobs running.
+[21:36:06] Block-level synthesis in progress, 15 of 160 jobs complete, 8 jobs running.
+[21:36:37] Block-level synthesis in progress, 17 of 160 jobs complete, 7 jobs running.
+[21:37:07] Block-level synthesis in progress, 21 of 160 jobs complete, 4 jobs running.
+[21:37:37] Block-level synthesis in progress, 25 of 160 jobs complete, 6 jobs running.
+[21:38:07] Block-level synthesis in progress, 26 of 160 jobs complete, 8 jobs running.
+[21:38:37] Block-level synthesis in progress, 27 of 160 jobs complete, 7 jobs running.
+[21:39:07] Block-level synthesis in progress, 28 of 160 jobs complete, 8 jobs running.
+[21:39:38] Block-level synthesis in progress, 33 of 160 jobs complete, 5 jobs running.
+[21:40:08] Block-level synthesis in progress, 34 of 160 jobs complete, 8 jobs running.
+[21:40:38] Block-level synthesis in progress, 35 of 160 jobs complete, 8 jobs running.
+[21:41:08] Block-level synthesis in progress, 37 of 160 jobs complete, 6 jobs running.
+[21:41:38] Block-level synthesis in progress, 42 of 160 jobs complete, 6 jobs running.
+[21:42:09] Block-level synthesis in progress, 42 of 160 jobs complete, 8 jobs running.
+[21:42:39] Block-level synthesis in progress, 43 of 160 jobs complete, 8 jobs running.
+[21:43:09] Block-level synthesis in progress, 45 of 160 jobs complete, 8 jobs running.
+[21:43:39] Block-level synthesis in progress, 50 of 160 jobs complete, 5 jobs running.
+[21:44:10] Block-level synthesis in progress, 50 of 160 jobs complete, 8 jobs running.
+[21:44:40] Block-level synthesis in progress, 52 of 160 jobs complete, 7 jobs running.
+[21:45:10] Block-level synthesis in progress, 55 of 160 jobs complete, 6 jobs running.
+[21:45:40] Block-level synthesis in progress, 59 of 160 jobs complete, 6 jobs running.
+[21:46:11] Block-level synthesis in progress, 61 of 160 jobs complete, 6 jobs running.
+[21:46:41] Block-level synthesis in progress, 65 of 160 jobs complete, 5 jobs running.
+[21:47:11] Block-level synthesis in progress, 71 of 160 jobs complete, 4 jobs running.
+[21:47:41] Block-level synthesis in progress, 80 of 160 jobs complete, 1 job running.
+[21:48:12] Block-level synthesis in progress, 88 of 160 jobs complete, 4 jobs running.
+[21:48:42] Block-level synthesis in progress, 93 of 160 jobs complete, 6 jobs running.
+[21:49:12] Block-level synthesis in progress, 95 of 160 jobs complete, 6 jobs running.
+[21:49:43] Block-level synthesis in progress, 97 of 160 jobs complete, 7 jobs running.
+[21:50:13] Block-level synthesis in progress, 105 of 160 jobs complete, 4 jobs running.
+[21:50:43] Block-level synthesis in progress, 107 of 160 jobs complete, 6 jobs running.
+[21:51:13] Block-level synthesis in progress, 109 of 160 jobs complete, 7 jobs running.
+[21:51:44] Block-level synthesis in progress, 112 of 160 jobs complete, 7 jobs running.
+[21:52:14] Block-level synthesis in progress, 122 of 160 jobs complete, 4 jobs running.
+[21:52:44] Block-level synthesis in progress, 122 of 160 jobs complete, 8 jobs running.
+[21:53:15] Block-level synthesis in progress, 122 of 160 jobs complete, 8 jobs running.
+[21:53:45] Block-level synthesis in progress, 122 of 160 jobs complete, 8 jobs running.
+[21:54:15] Block-level synthesis in progress, 130 of 160 jobs complete, 4 jobs running.
+[21:54:46] Block-level synthesis in progress, 130 of 160 jobs complete, 8 jobs running.
+[21:55:16] Block-level synthesis in progress, 130 of 160 jobs complete, 8 jobs running.
+[21:55:47] Block-level synthesis in progress, 131 of 160 jobs complete, 7 jobs running.
+[21:56:17] Block-level synthesis in progress, 139 of 160 jobs complete, 3 jobs running.
+[21:56:47] Block-level synthesis in progress, 139 of 160 jobs complete, 8 jobs running.
+[21:57:18] Block-level synthesis in progress, 139 of 160 jobs complete, 8 jobs running.
+[21:57:48] Block-level synthesis in progress, 139 of 160 jobs complete, 8 jobs running.
+[21:58:19] Block-level synthesis in progress, 143 of 160 jobs complete, 4 jobs running.
+[21:58:49] Block-level synthesis in progress, 146 of 160 jobs complete, 6 jobs running.
+[21:59:19] Block-level synthesis in progress, 148 of 160 jobs complete, 6 jobs running.
+[21:59:50] Block-level synthesis in progress, 148 of 160 jobs complete, 6 jobs running.
+[22:00:20] Block-level synthesis in progress, 150 of 160 jobs complete, 4 jobs running.
+[22:00:51] Block-level synthesis in progress, 156 of 160 jobs complete, 4 jobs running.
+[22:01:21] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:01:51] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:02:22] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:02:52] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:03:23] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:03:53] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:04:24] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:04:54] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:05:25] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:05:55] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:06:26] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:06:57] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:07:27] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:07:58] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:08:28] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:08:59] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:09:29] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:10:00] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:10:30] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:11:01] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:11:32] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:12:02] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:12:33] Block-level synthesis in progress, 157 of 160 jobs complete, 3 jobs running.
+[22:13:03] Top-level synthesis in progress.
+[22:13:34] Top-level synthesis in progress.
+[22:14:05] Top-level synthesis in progress.
+[22:14:35] Top-level synthesis in progress.
+[22:15:08] Run vpl: Step synth: Completed
+[22:15:08] Run vpl: Step impl: Started
+[22:30:57] Finished 2nd of 6 tasks (FPGA linking synthesized kernels to platform). Elapsed time: 01h 03m 46s 
+
+[22:30:57] Starting logic optimization..
+[22:33:00] Phase 1 Retarget
+[22:33:30] Phase 2 Constant propagation
+[22:33:30] Phase 3 Sweep
+[22:34:31] Phase 4 BUFG optimization
+[22:34:31] Phase 5 Shift Register Optimization
+[22:35:02] Phase 6 Post Processing Netlist
+[22:36:34] Finished 3rd of 6 tasks (FPGA logic optimization). Elapsed time: 00h 05m 36s 
+
+[22:36:34] Starting logic placement..
+[22:37:07] Run vpl: Step impl: Failed
+[22:37:08] Run vpl: FINISHED. Run Status: impl ERROR
+
+===>The following messages were generated while processing /home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/vivado/vpl/prj/prj.runs/impl_1 :
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB18 and RAMB36/FIFO over-utilized in Pblock pblock_dynamic_SLR0 (This design requires more RAMB18 and RAMB36/FIFO cells than are available in Pblock 'pblock_dynamic_SLR0'. This design requires 3010 of such cell types but only 1200 compatible sites are available in Pblock 'pblock_dynamic_SLR0'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR0' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB18 and RAMB36/FIFO over-utilized in Pblock pblock_dynamic_SLR1 (This design requires more RAMB18 and RAMB36/FIFO cells than are available in Pblock 'pblock_dynamic_SLR1'. This design requires 3010 of such cell types but only 1152 compatible sites are available in Pblock 'pblock_dynamic_SLR1'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR1' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB18 and RAMB36/FIFO over-utilized in Pblock pblock_dynamic_SLR2 (This design requires more RAMB18 and RAMB36/FIFO cells than are available in Pblock 'pblock_dynamic_SLR2'. This design requires 3010 of such cell types but only 1200 compatible sites are available in Pblock 'pblock_dynamic_SLR2'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR2' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB18 and RAMB36/FIFO over-utilized in Top Level Design (This design requires more RAMB18 and RAMB36/FIFO cells than are available in the target device. This design requires 9426 of such cell types but only 4032 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36/FIFO over-utilized in Pblock pblock_dynamic_SLR0 (This design requires more RAMB36/FIFO cells than are available in Pblock 'pblock_dynamic_SLR0'. This design requires 1388 of such cell types but only 600 compatible sites are available in Pblock 'pblock_dynamic_SLR0'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR0' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36/FIFO over-utilized in Pblock pblock_dynamic_SLR1 (This design requires more RAMB36/FIFO cells than are available in Pblock 'pblock_dynamic_SLR1'. This design requires 1388 of such cell types but only 576 compatible sites are available in Pblock 'pblock_dynamic_SLR1'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR1' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36/FIFO over-utilized in Pblock pblock_dynamic_SLR2 (This design requires more RAMB36/FIFO cells than are available in Pblock 'pblock_dynamic_SLR2'. This design requires 1388 of such cell types but only 600 compatible sites are available in Pblock 'pblock_dynamic_SLR2'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR2' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36/FIFO over-utilized in Top Level Design (This design requires more RAMB36/FIFO cells than are available in the target device. This design requires 4359 of such cell types but only 2016 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36E2 over-utilized in Pblock pblock_dynamic_SLR0 (This design requires more RAMB36E2 cells than are available in Pblock 'pblock_dynamic_SLR0'. This design requires 1388 of such cell types but only 600 compatible sites are available in Pblock 'pblock_dynamic_SLR0'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR0' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36E2 over-utilized in Pblock pblock_dynamic_SLR1 (This design requires more RAMB36E2 cells than are available in Pblock 'pblock_dynamic_SLR1'. This design requires 1388 of such cell types but only 576 compatible sites are available in Pblock 'pblock_dynamic_SLR1'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR1' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36E2 over-utilized in Pblock pblock_dynamic_SLR2 (This design requires more RAMB36E2 cells than are available in Pblock 'pblock_dynamic_SLR2'. This design requires 1388 of such cell types but only 600 compatible sites are available in Pblock 'pblock_dynamic_SLR2'. Please consider increasing the span of Pblock 'pblock_dynamic_SLR2' or removing cells from it.)
+ERROR: [VPL UTLZ-1] Resource utilization: RAMB36E2 over-utilized in Top Level Design (This design requires more RAMB36E2 cells than are available in the target device. This design requires 4359 of such cell types but only 2016 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device.)
+ERROR: [VPL 4-23] Error(s) found during DRC. Placer not run.
+ERROR: [VPL 60-773] In '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/vivado/vpl/runme.log', caught Tcl error:  problem implementing dynamic region, impl_1: place_design ERROR, please look at the run log file '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/vivado/vpl/prj/prj.runs/impl_1/runme.log' for more information
+WARNING: [VPL 60-732] Link warning: No monitor points found for BD automation.
+WARNING: [VPL 60-732] Link warning: The available BRAMs may not be sufficient to accommodate the kernels
+ERROR: [VPL 60-704] Integration error, problem implementing dynamic region, impl_1: place_design ERROR, please look at the run log file '/home/user/Deepclean_tests/nrp_u55c_benchmark_deepclean/build_dir.hw.xilinx_u55c_gen3x16_xdma_3_202210_1/link/vivado/vpl/prj/prj.runs/impl_1/runme.log' for more information
+ERROR: [VPL 60-1328] Vpl run 'vpl' failed
+ERROR: [VPL 60-806] Failed to finish platform linker
+INFO: [v++ 60-1442] [22:37:09] Run run_link: Step vpl: Failed
+Time (s): cpu = 00:00:54 ; elapsed = 01:09:59 . Memory (MB): peak = 435.156 ; gain = 0.000 ; free physical = 946382 ; free virtual = 965710
+ERROR: [v++ 60-661] v++ link run 'run_link' failed
+ERROR: [v++ 60-626] Kernel link failed to complete
+ERROR: [v++ 60-703] Failed to finish linking
+INFO: [v++ 60-1653] Closing dispatch client.

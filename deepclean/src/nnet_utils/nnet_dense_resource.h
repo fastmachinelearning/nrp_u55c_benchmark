@@ -1,22 +1,3 @@
-//
-//    rfnoc-hls-neuralnet: Vivado HLS code for neural-net building blocks
-//
-//    Copyright (C) 2017 EJ Kreinar
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
-
 #ifndef NNET_DENSE_RESOURCE_H_
 #define NNET_DENSE_RESOURCE_H_
 
@@ -35,36 +16,32 @@ void dense_resource_rf_leq_nin(
     typename CONFIG_T::weight_t weights[CONFIG_T::n_in*CONFIG_T::n_out],
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_out]) {
 
-    const int rufactor = CONFIG_T::reuse_factor;
-    const int multfactor = MIN(CONFIG_T::n_in,CONFIG_T::reuse_factor);
-    const int multiplier_limit = DIV_ROUNDUP(CONFIG_T::n_in*CONFIG_T::n_out, multfactor);
-    const int block_factor = DIV_ROUNDUP(CONFIG_T::n_in*CONFIG_T::n_out, CONFIG_T::reuse_factor);
-    const int multscale = multiplier_limit/CONFIG_T::n_out;
-    const int nin = CONFIG_T::n_in;
-    const int nout = CONFIG_T::n_out;
+    const int multiplier_limit = DIV_ROUNDUP(CONFIG_T::n_in * CONFIG_T::n_out, CONFIG_T::reuse_factor);
+    const int block_factor = DIV_ROUNDUP(CONFIG_T::n_in * CONFIG_T::n_out, CONFIG_T::reuse_factor);
+    const int multscale = multiplier_limit / CONFIG_T::n_out;
 
-    assert((multiplier_limit % nout == 0 || rufactor >= nin) && "The current Reuse Factor is not allowed");
+    assert((multiplier_limit % CONFIG_T::n_out == 0 || CONFIG_T::reuse_factor >= CONFIG_T::n_in) && "The current Reuse Factor is not allowed");
     assert((multiplier_limit == block_factor) && "This function is correct only for RF <= N_IN");
 
-    #pragma HLS function_instantiate variable=weights,biases
-    //#pragma HLS RESOURCE variable=weights core=RAM_2P_BRAM Commenting out the deisgnation HLS seems to choose correctly
-    #pragma HLS ARRAY_RESHAPE   variable=weights block factor=block_factor
+    // Treating weights as 2d is required to make sure Vitis doesn't use urem cores to calculate indices.
+    // Also, we don't apply ARRAY_RESHAPE pragma as Vitis figures this out on its own.
+    typename CONFIG_T::weight_t (*weights_2d)[CONFIG_T::reuse_factor] = (typename CONFIG_T::weight_t (*)[CONFIG_T::reuse_factor]) weights; // I got you now motherfucker!
+
     #pragma HLS ARRAY_PARTITION variable=biases complete
 
     typename CONFIG_T::accum_t acc[CONFIG_T::n_out];
     #pragma HLS ARRAY_PARTITION variable=acc complete
 
     InitAccum:
-    for (int iacc = 0; iacc < nout; iacc++) {
+    for (int iacc = 0; iacc < CONFIG_T::n_out; iacc++) {
         #pragma HLS UNROLL
         acc[iacc] = (typename CONFIG_T::accum_t) biases[iacc];
     }
 
     ReuseLoop:
-    for (int ir = 0; ir < rufactor; ir++) {
+    for (int ir = 0; ir < CONFIG_T::reuse_factor; ir++) {
         #pragma HLS PIPELINE II=1 rewind
 
-        int w_index = ir;
         int in_index = ir;
         int out_index = 0;
         int acc_step = 0;
@@ -74,13 +51,11 @@ void dense_resource_rf_leq_nin(
             #pragma HLS UNROLL
 
             acc[out_index] += static_cast<typename CONFIG_T::accum_t>(
-              CONFIG_T::template product<data_T, typename CONFIG_T::weight_t>::product(data[in_index], weights[w_index]));
+              CONFIG_T::template product<data_T, typename CONFIG_T::weight_t>::product(data[in_index], weights_2d[im][ir]));
 
-            // Increment w_index
-            w_index += rufactor;
             // Increment in_index
-            in_index += rufactor;
-            if (in_index >= nin) {
+            in_index += CONFIG_T::reuse_factor;
+            if (in_index >= CONFIG_T::n_in) {
                 in_index = ir;
             }
             // Increment out_index
@@ -108,66 +83,59 @@ void dense_resource_rf_gt_nin_rem0(
     typename CONFIG_T::weight_t weights[CONFIG_T::n_in*CONFIG_T::n_out],
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_out]) {
 
-    const int rufactor = MIN(CONFIG_T::reuse_factor, CONFIG_T::n_in * CONFIG_T::n_out);
-    const int multfactor = MIN(CONFIG_T::n_in,CONFIG_T::reuse_factor);
-    const int multiplier_limit = DIV_ROUNDUP(CONFIG_T::n_in*CONFIG_T::n_out, multfactor);
-    const int block_factor = DIV_ROUNDUP(CONFIG_T::n_in*CONFIG_T::n_out, CONFIG_T::reuse_factor);
-    const int multscale = multiplier_limit/CONFIG_T::n_out;
-    const int nin = CONFIG_T::n_in;
-    const int nout = CONFIG_T::n_out;
+    const int multiplier_limit = DIV_ROUNDUP(CONFIG_T::n_in * CONFIG_T::n_out, CONFIG_T::n_in);
+    const int block_factor = DIV_ROUNDUP(CONFIG_T::n_in * CONFIG_T::n_out, CONFIG_T::reuse_factor);
 
-    assert((multiplier_limit % nout == 0 || rufactor >= nin) && "The current Reuse Factor is not allowed");
-    assert((rufactor > nin && rufactor % nin == 0) && "This function is correct only for RF > N_IN && RF % N_IN == 0");
+    assert((multiplier_limit % CONFIG_T::n_out == 0 || CONFIG_T::reuse_factor >= CONFIG_T::n_in) && "The current Reuse Factor is not allowed");
+    assert((CONFIG_T::reuse_factor > CONFIG_T::n_in && CONFIG_T::reuse_factor % CONFIG_T::n_in == 0) && "This function is correct only for RF > N_IN && RF % N_IN == 0");
 
-    #pragma HLS function_instantiate variable=weights,biases
-    //#pragma HLS RESOURCE variable=weights core=RAM_2P_BRAM Commenting out the deisgnation HLS seems to choose correctly
-    #pragma HLS ARRAY_RESHAPE   variable=weights block factor=block_factor
+    // Treating weights as 2d is required to make sure Vitis doesn't use urem cores to calculate indices.
+    // Also, we don't apply ARRAY_RESHAPE pragma as Vitis figures this out on its own.
+    typename CONFIG_T::weight_t (*weights_2d)[CONFIG_T::reuse_factor] = (typename CONFIG_T::weight_t (*)[CONFIG_T::reuse_factor]) weights;
+
     #pragma HLS ARRAY_PARTITION variable=biases complete
 
     typename CONFIG_T::accum_t acc[CONFIG_T::n_out];
     #pragma HLS ARRAY_PARTITION variable=acc complete
 
     InitAccum:
-    for (int iacc = 0; iacc < nout; iacc++) {
+    for (int iacc = 0; iacc < CONFIG_T::n_out; iacc++) {
         #pragma HLS UNROLL
         acc[iacc] = (typename CONFIG_T::accum_t) biases[iacc];
     }
 
-    int w_index;
     int in_index = 0;
     int out_index;
     int outstep = 0;
-    const int outscale = rufactor / nin;
+    const int outscale = CONFIG_T::reuse_factor / CONFIG_T::n_in;
 
-    int outidx[rufactor];
+    int outidx[CONFIG_T::reuse_factor];
     IndexLoop:
-    for (int ir = 0; ir < rufactor; ir++) {
+    for (int ir = 0; ir < CONFIG_T::reuse_factor; ir++) {
         outidx[ir] = outstep;
-        if ((ir + 1) % nin == 0) {
+        if ((ir + 1) % CONFIG_T::n_in == 0) {
             outstep++;
         }
     }
 
     ReuseLoop:
-    for (int ir = 0; ir < rufactor; ir++) {
+    for (int ir = 0; ir < CONFIG_T::reuse_factor; ir++) {
         #pragma HLS PIPELINE II=1 rewind
 
-        w_index = ir;
         out_index = outidx[ir]/*outstep*/;
 
         MultLoop:
         for (int im = 0; im < block_factor; im++) {
             #pragma HLS UNROLL
-            acc[out_index] += static_cast<typename CONFIG_T::accum_t>(
-              CONFIG_T::template product<data_T, typename CONFIG_T::weight_t>::product(data[in_index], weights[w_index]));
 
-            w_index += rufactor;
-            if (w_index >= CONFIG_T::n_in * CONFIG_T::n_out) break; // check out of bounds
+            acc[out_index] += static_cast<typename CONFIG_T::accum_t>(
+              CONFIG_T::template product<data_T, typename CONFIG_T::weight_t>::product(data[in_index], weights_2d[im][ir]));
+
             out_index += outscale;
         }
 
         in_index++;
-        if (in_index >= nin) {
+        if (in_index >= CONFIG_T::n_in) {
             in_index = 0;
             //outstep++; // This causes a huge increase in scheduling and RTL generation times, hence the above workaround.
         }
@@ -188,33 +156,29 @@ void dense_resource_rf_gt_nin(
     typename CONFIG_T::weight_t weights[CONFIG_T::n_in*CONFIG_T::n_out],
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_out]) {
 
-    const int rufactor = CONFIG_T::reuse_factor;
-    const int multfactor = MIN(CONFIG_T::n_in,CONFIG_T::reuse_factor);
-    const int multiplier_limit = DIV_ROUNDUP(CONFIG_T::n_in*CONFIG_T::n_out, multfactor);
-    const int block_factor = DIV_ROUNDUP(CONFIG_T::n_in*CONFIG_T::n_out, CONFIG_T::reuse_factor);
-    const int multscale = multiplier_limit/CONFIG_T::n_out;
-    const int nin = CONFIG_T::n_in;
-    const int nout = CONFIG_T::n_out;
+    const int multiplier_limit = CONFIG_T::n_out;
+    const int block_factor = DIV_ROUNDUP(CONFIG_T::n_in * CONFIG_T::n_out, CONFIG_T::reuse_factor);
 
-    assert((multiplier_limit % nout == 0 || rufactor >= nin) && "The current Reuse Factor is not allowed");
-    assert((rufactor > nin) && "This function is correct only for RF > N_IN");
+    assert((multiplier_limit % CONFIG_T::n_out == 0 || CONFIG_T::reuse_factor >= CONFIG_T::n_in) && "The current Reuse Factor is not allowed");
+    assert((CONFIG_T::reuse_factor > CONFIG_T::n_in) && "This function is correct only for RF > N_IN");
 
-    #pragma HLS function_instantiate variable=weights,biases
-    //#pragma HLS RESOURCE variable=weights core=RAM_2P_BRAM Commenting out the deisgnation HLS seems to choose correctly
-    #pragma HLS ARRAY_RESHAPE   variable=weights block factor=block_factor
+    // Treating weights as 2d is required to make sure Vitis doesn't use urem cores to calculate indices.
+    // Also, we don't apply ARRAY_RESHAPE pragma as Vitis figures this out on its own.
+    typename CONFIG_T::weight_t (*weights_2d)[CONFIG_T::reuse_factor] = (typename CONFIG_T::weight_t (*)[CONFIG_T::reuse_factor]) weights;
+
     #pragma HLS ARRAY_PARTITION variable=biases complete
 
     typename CONFIG_T::accum_t acc[CONFIG_T::n_out];
     #pragma HLS ARRAY_PARTITION variable=acc complete
 
     InitAccum:
-    for (int iacc = 0; iacc < nout; iacc++) {
+    for (int iacc = 0; iacc < CONFIG_T::n_out; iacc++) {
         #pragma HLS UNROLL
         acc[iacc] = (typename CONFIG_T::accum_t) biases[iacc];
     }
 
     ReuseLoop:
-    for (int ir = 0; ir < rufactor; ir++) {
+    for (int ir = 0; ir < CONFIG_T::reuse_factor; ir++) {
         #pragma HLS PIPELINE II=1 rewind
         typename CONFIG_T::accum_t tmpmult[block_factor];
         #pragma HLS ARRAY_PARTITION variable=tmpmult complete
@@ -222,10 +186,9 @@ void dense_resource_rf_gt_nin(
         MultLoop:
         for (int im = 0; im < block_factor; im++) {
             #pragma HLS UNROLL
-            int w_index = ir + rufactor * im;
-            int in_index = w_index % nin;
-            if (w_index >= CONFIG_T::n_in*CONFIG_T::n_out) continue; // check out of bounds
-            tmpmult[im] = CONFIG_T::template product<data_T, typename CONFIG_T::weight_t>::product(data[in_index], weights[w_index]);
+            int w_index = ir + CONFIG_T::reuse_factor * im;
+            int in_index = w_index % CONFIG_T::n_in; // As of Vitis HLS 2022.1, this still results in urem core being used.
+            tmpmult[im] = CONFIG_T::template product<data_T, typename CONFIG_T::weight_t>::product(data[in_index], weights_2d[im][ir]);
         }
 
         typename CONFIG_T::accum_t mult[multiplier_limit];
@@ -240,8 +203,8 @@ void dense_resource_rf_gt_nin(
         AccumLoop1:
         for (int im = 0; im < block_factor; im++) {
             #pragma HLS UNROLL
-            int w_index = ir + rufactor * im;
-            int out_index = w_index / multfactor;
+            int w_index = ir + CONFIG_T::reuse_factor * im;
+            int out_index = w_index / CONFIG_T::n_in;
             if (out_index >= multiplier_limit) continue; // check out of bounds
             mult[out_index] += tmpmult[im];
         }
@@ -249,8 +212,6 @@ void dense_resource_rf_gt_nin(
         AccumLoop2:
         for (int im = 0; im < multiplier_limit; im++) {
             #pragma HLS UNROLL
-            //int out_index = im/multscale; // This is the general case
-            //acc[out_index] += mult[im];
             acc[im] += mult[im]; // If RF > N_IN then multiplier_limit == n_out
         }
     }
@@ -270,7 +231,7 @@ void dense_resource(
     typename CONFIG_T::weight_t weights[CONFIG_T::n_in*CONFIG_T::n_out],
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_out]) {
 
-    #pragma HLS INLINE region
+    #pragma HLS INLINE recursive
 
     if (CONFIG_T::reuse_factor <= CONFIG_T::n_in) {
         dense_resource_rf_leq_nin<data_T, res_T, CONFIG_T>(data, res, weights, biases);

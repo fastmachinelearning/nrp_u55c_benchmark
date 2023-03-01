@@ -60,7 +60,7 @@ void compute_output_buffer_tr_1d(
     #pragma HLS ARRAY_PARTITION variable=res_out complete dim = 0
 
     res_T res_pack;
-    #pragma HLS DATA_PACK variable=res_pack
+    PRAGMA_DATA_PACK(res_pack)
 
     // Add pixel to buffer
     nnet::kernel_shift_tr_1d<data_T, CONFIG_T>(in_elem, kernel_data);
@@ -68,7 +68,7 @@ void compute_output_buffer_tr_1d(
     //always do stride number of multiplications
     StrideLoop: for (int idx = 0; idx < CONFIG_T::stride_width; idx++) {
         #pragma HLS UNROLL
-        #pragma HLS INLINE region
+
         // Dense multiply
         if (CONFIG_T::strategy == nnet::latency) {
             dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
@@ -129,7 +129,7 @@ void conv_1d_transpose_cl(
 )
 {
     switch(CONFIG_T::implementation) {
-        #pragma HLS inline region
+        //#pragma HLS INLINE recursive // hmmm, this breaks Vitis HLS synthesis, a bug?
         case conv_implementation::linebuffer:
             conv_1d_transpose_buffer_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
             break;

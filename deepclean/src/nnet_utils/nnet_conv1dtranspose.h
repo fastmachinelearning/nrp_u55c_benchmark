@@ -40,7 +40,7 @@ void conv_1d_transpose_cl(
     typename CONFIG_T::bias_t   biases[CONFIG_T::n_filt]
 )
 {
-    #pragma HLS INLINE region
+    #pragma HLS INLINE recursive
     //for now, we are only adding resource strategy
     conv_1d_transpose_resource_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
 }

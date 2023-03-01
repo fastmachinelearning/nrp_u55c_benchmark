@@ -23,10 +23,13 @@ void conv_2d_resource_cl(
     assert((multiplier_limit % mult_n_out == 0 || CONFIG_T::reuse_factor >= mult_n_in) && "The current Reuse Factor is not allowed");
     assert((multiplier_limit == block_factor) && "This function is correct only for RF <= FILT_HEIGHT * FILT_WIDTH * N_CHAN");
 
+    // Treating weights as 2d is required to make sure Vitis doesn't use urem cores to calculate indices.
+    // Also, we don't apply ARRAY_RESHAPE pragma as Vitis figures this out on its own.
+    typename CONFIG_T::weight_t (*weights_2d)[CONFIG_T::reuse_factor] = (typename CONFIG_T::weight_t (*)[CONFIG_T::reuse_factor]) weights;
+
     data_T data_buf[CONFIG_T::n_pixels][mult_n_in];
     #pragma HLS ARRAY_PARTITION variable=data_buf complete dim=0
 
-    #pragma HLS ARRAY_RESHAPE   variable=weights block factor=block_factor
     #pragma HLS ARRAY_PARTITION variable=biases complete
 
     typename CONFIG_T::accum_t acc[CONFIG_T::n_pixels][mult_n_out];
@@ -53,7 +56,6 @@ void conv_2d_resource_cl(
         for (unsigned i_rf = 0; i_rf < CONFIG_T::reuse_factor; i_rf++) {
             #pragma HLS PIPELINE II=1 rewind
 
-            unsigned i_w = i_rf;
             unsigned i_in = i_rf;
             unsigned i_out = 0;
             unsigned i_acc = 0;
@@ -67,11 +69,9 @@ void conv_2d_resource_cl(
                     #pragma HLS UNROLL
 
                     acc[i_pxl][i_out] += static_cast<typename CONFIG_T::accum_t>(
-                            CONFIG_T::mult_config::template product<data_T, typename CONFIG_T::mult_config::weight_t>::product(data_buf[i_pxl][i_in], weights[i_w]));
+                            CONFIG_T::mult_config::template product<data_T, typename CONFIG_T::mult_config::weight_t>::product(data_buf[i_pxl][i_in], weights_2d[i_blk][i_rf]));
                 }
 
-                // Increment i_w
-                i_w += CONFIG_T::reuse_factor;
                 // Increment i_in
                 i_in += CONFIG_T::reuse_factor;
                 if (i_in >= mult_n_in) {

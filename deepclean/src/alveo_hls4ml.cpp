@@ -76,43 +76,38 @@ extern "C" {
 
     //getting data from DRAM
     for (int i = 0; i < INPUT_STREAM_LEN; i++) {
-        #pragma HLS PIPELINE II=1
         in_buff[i] = in[i];
     }
 
-    std::cout<<"------------------"<<std::endl;
     //=============================================
     //input
     //=============================================
         
     for(unsigned i = 0; i < INPUT_STREAM_LEN / input_t::size; ++i) {
         input_t ctype;
-        #pragma HLS DATA_PACK variable=ctype
         for(unsigned j = 0; j < input_t::size; j++) {
-            ctype[j] = in_buf[i * input_t::size + j];
+            bigdata_t in_val = in[i * input_t::size + j];
+            ctype[j] = typename input_t::value_type(in_val);
         }
         in_stream.write(ctype);
     }
-
-    std::cout<<"inf start"<<std::endl;
     hls4ml: MYPROJ(in_stream,out_stream);
-    std::cout<<"inf end"<<std::endl;
-
+      
     //=============================================
     //output
     //=============================================
     for(unsigned i1 = 0; i1 < OUT_STREAM_LEN / result_t::size; ++i1) {
-        result_t ctype = out_local.read();
-        out_buf[i1]=ctype
+        result_t ctype = out_stream.read();
+        out_buf[i1]=bigdata_t(ctype[0]);
         for(unsigned j1 = 0; j1 < result_t::size; j1++) {
             out_buf[i1 * result_t::size + j1] = ctype[j1];
         }
     }
         
    for(int i2 = 0; i2 < OUT_STREAM_LEN; i2++) {
-       #pragma HLS PIPELINE II=1
        out[i2]= out_buf[i2];
     }
+}
 }
 
 

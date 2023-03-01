@@ -14,4 +14,5 @@
 //===============
 #define OUT_STREAM_LEN N_OUTPUTS_38  
 
-typedef ap_fixed<16,6> bigdata_t;
+typedef ap_fixed<16,2> bigdata_t;
+

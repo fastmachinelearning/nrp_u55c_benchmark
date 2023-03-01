@@ -2,6 +2,7 @@
 #define NNET_POOLING_H_
 
 #include <iostream>
+#include "nnet_common.h"
 #include "nnet_helpers.h"
 
 namespace nnet{
@@ -109,7 +110,7 @@ void pooling1d_cl(
 
     // TODO partition the arrays according to the reuse factor
     const int limit = pool_op_limit_1d<CONFIG_T>();
-    #pragma HLS ALLOCATION instances=pool_op limit=limit function
+    #pragma HLS ALLOCATION function instances=pool_op<data_T, CONFIG_T::pool_width, CONFIG_T::pool_op> limit=limit
     // Add any necessary padding
     unsigned padded_width = CONFIG_T::n_in + CONFIG_T::pad_left + CONFIG_T::pad_right;
     if (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) {
@@ -120,7 +121,6 @@ void pooling1d_cl(
         // Loop over input image x in steps of stride
         for(int ii = 0; ii < padded_width; ii += CONFIG_T::stride_width) {
             data_T pool[CONFIG_T::pool_width];
-            #pragma HLS ARRAY_PARTITION variable=pool complete dim=0
             // Keep track of number of pixels in image vs padding region
             unsigned img_overlap = 0;
             // Loop over pool window x
@@ -159,11 +159,10 @@ void global_pooling1d_cl(
 
     // TODO partition the arrays according to the reuse factor
     const int limit = pool_op_limit_1d<CONFIG_T>();
-    #pragma HLS ALLOCATION instances=pool_op limit=limit function
+    #pragma HLS ALLOCATION function instances=pool_op<data_T, CONFIG_T::pool_width, CONFIG_T::pool_op> limit=limit
 
     for(int ff = 0; ff < CONFIG_T::n_filt; ff++) {
         data_T pool[CONFIG_T::n_in];
-        #pragma HLS ARRAY_PARTITION variable=pool complete dim=0
         for(int jj = 0; jj < CONFIG_T::n_in; jj++) {
             pool[jj] = data[jj * CONFIG_T::n_filt + ff];
         }
@@ -199,7 +198,7 @@ struct pooling2d_config{
 
 template<typename CONFIG_T>
 constexpr int pool_op_limit(){
-    return (CONFIG_T::out_height * CONFIG_T::out_width) * CONFIG_T::n_filt / CONFIG_T::reuse_factor;
+    return DIV_ROUNDUP((CONFIG_T::out_height * CONFIG_T::out_width) * CONFIG_T::n_filt, CONFIG_T::reuse_factor);
 }
 
 template<class data_T, class res_T, typename CONFIG_T>
@@ -211,7 +210,7 @@ void pooling2d_cl(
 
     // TODO partition the arrays according to the reuse factor
     const int limit = pool_op_limit<CONFIG_T>();
-    #pragma HLS ALLOCATION instances=pool_op limit=limit function
+    #pragma HLS ALLOCATION function instances=pool_op<data_T, CONFIG_T::pool_height*CONFIG_T::pool_width, CONFIG_T::pool_op> limit=limit
     // Add any necessary padding
     unsigned padded_height = CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom;
     unsigned padded_width = CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right;
@@ -226,7 +225,6 @@ void pooling2d_cl(
             // Loop over input image x in steps of stride
             for(int jj = 0; jj < padded_width; jj += CONFIG_T::stride_width){
                 data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
-                #pragma HLS ARRAY_PARTITION variable=pool complete dim=0
                 // Keep track of number of pixels in image vs padding region
                 unsigned img_overlap = 0;
                 // Loop over pool window y
@@ -266,7 +264,7 @@ void pooling2d_cf(
 
     // TODO partition the arrays according to the reuse factor
     const int limit = pool_op_limit<CONFIG_T>();
-    #pragma HLS ALLOCATION instances=pool_op limit=limit function
+    #pragma HLS ALLOCATION function instances=pool_op<data_T, CONFIG_T::pool_height*CONFIG_T::pool_width, CONFIG_T::pool_op> limit=limit
     // Add any necessary padding
     unsigned padded_height = CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom;
     unsigned padded_width = CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right;
@@ -281,7 +279,6 @@ void pooling2d_cf(
             // Loop over input image x in steps of stride
             for(int jj = 0; jj < padded_width; jj += CONFIG_T::stride_width){
                 data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
-                #pragma HLS ARRAY_PARTITION variable=pool complete dim=0
                 // Keep track of number of pixels in image vs padding region
                 unsigned img_overlap = 0;
                 // Loop over pool window y
@@ -309,31 +306,6 @@ void pooling2d_cf(
                 }
             }
         }
-    }
-}
-
-template<class data_T, class res_T, typename CONFIG_T>
-void global_pooling2d_cl(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_filt], res_T res[CONFIG_T::n_filt]) {
-    assert(CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0);
-    assert(CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0);
-    assert(CONFIG_T::pool_width == CONFIG_T::stride_width);
-    assert(CONFIG_T::pool_height == CONFIG_T::stride_height);
-
-    #pragma HLS PIPELINE II=CONFIG_T::reuse_factor
-
-    const int limit = pool_op_limit<CONFIG_T>();
-    #pragma HLS ALLOCATION instances=pool_op limit=limit function
-
-    FiltLoop:
-    for(int filt = 0; filt < CONFIG_T::n_filt; filt++) {
-        data_T pool[CONFIG_T::in_height * CONFIG_T::in_width];
-        
-        InputLoop:
-        for (int i = 0 ; i < CONFIG_T::in_height * CONFIG_T::in_width ; i++) {
-          pool[i] = data[i * CONFIG_T::n_filt + filt];
-        }
-                  
-        res[filt] = static_cast<res_T>(pool_op<data_T, CONFIG_T::in_height * CONFIG_T::in_width, CONFIG_T::pool_op>(pool));
     }
 }
 
