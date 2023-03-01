@@ -5,8 +5,8 @@ array set opt {
   reset      0
   csim       0
   synth      1
-  cosim      1
-  validation 1
+  cosim      0
+  validation 0
   export     1
   vsynth     1
   fifo_opt   0
@@ -155,7 +155,7 @@ if {$opt(reset)} {
 }
 set_top ${myproject}
 add_files ${myproject}.cpp -cflags "-std=c++0x"
-add_files -tb ${myproject}_test.cpp -cflags "-std=c++0x"
+add_files -tb ${myproject}_test.cpp -cflags "-std=c++0x -I/usr/include/x86_64-linux-gnu -B/usr/lib/x86_64-linux-gnu"
 add_files -tb weights
 add_files -tb tb_data
 if {$opt(reset)} {
@@ -165,7 +165,7 @@ if {$opt(reset)} {
 }
 catch {config_array_partition -maximum_size 4096}
 config_compile -name_max_length 60
-set_part {xcu250-figd2104-2L-e}
+set_part {xcu55c-fsvh2892-2L-e}
 create_clock -period 5 -name default
 
 
