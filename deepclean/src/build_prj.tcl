@@ -3,8 +3,8 @@
 #################
 array set opt {
   reset      0
-  csim       1
-  synth      1
+  csim       0
+  synth      0
   cosim      1
   validation 1
   export     0
@@ -19,7 +19,7 @@ proc remove_recursive_log_wave {} {
     set tcldir [file dirname [info script]]
     source [file join $tcldir project.tcl]
 
-    set filename ${myproject}_prj/solution1/sim/verilog/${myproject}_axi.tcl
+    set filename ${project_name}_prj/solution1/sim/verilog/${project_name}.tcl
     set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
     set temp     $filename.new.$timestamp
     # set backup   $filename.bak.$timestamp
@@ -35,19 +35,19 @@ proc remove_recursive_log_wave {} {
         puts $out $line
     }
 
-     close $in
-     close $out
+    close $in
+    close $out
 
-     # move the new data to the proper filename
-     file delete -force $filename
-     file rename -force $temp $filename
+    # move the new data to the proper filename
+    file delete -force $filename
+    file rename -force $temp $filename
 }
 
 proc add_vcd_instructions_tcl {} {
     set tcldir [file dirname [info script]]
     source [file join $tcldir project.tcl]
 
-    set filename ${myproject}_prj/solution1/sim/verilog/${myproject}_axi.tcl
+    set filename ${project_name}_prj/solution1/sim/verilog/${project_name}.tcl
     set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
     set temp     $filename.new.$timestamp
     # set backup   $filename.bak.$timestamp
@@ -58,45 +58,43 @@ proc add_vcd_instructions_tcl {} {
     # line-by-line, read the original file
     while {[gets $in line] != -1} {
         if {[string equal "$line" "log_wave -r /"]} {
-        set line {source "../../../../project.tcl"
-if {[string equal "$backend" "vivadoaccelerator"]} {
-    current_scope [get_scopes -regex /apatb_${myproject}_axi_top/AESL_inst_${myproject}_axi/${myproject}_U0.*]
-    set scopes [get_scopes -regexp {layer(\d*)_.*data_0_V_U.*}]
-    append scopes { }
-    current_scope /apatb_${myproject}_axi_top/AESL_inst_${myproject}_axi
-    append scopes [get_scopes -regexp {(in_local_V_data.*_0_.*)}]
-    append scopes { }
-    append scopes [get_scopes -regexp {(out_local_V_data.*_0_.*)}]
-} else {
-    current_scope [get_scopes -regex /apatb_${myproject}_top/AESL_inst_${myproject}]
-    set scopes [get_scopes -regexp {layer(\d*)_.*data_0_V_U.*}]
-}
-open_vcd fifo_opt.vcd
-foreach scope $scopes {
-    current_scope $scope
-    if {[catch [get_objects usedw]] == 0} {
-      puts "$scope skipped"
-      continue
-    }
-    set usedw [get_objects usedw]
-    set depth [get_objects DEPTH]
-    add_wave $usedw
-    log_vcd $usedw
-    log_wave $usedw
-    add_wave $depth
-    log_vcd $depth
-    log_wave $depth
-    }
-    }
-
-    set line [string map [list "myproject" $myproject] $line]
+            set line {source "../../../../project.tcl"
+                if {[string equal "$backend" "vivadoaccelerator"]} {
+                    current_scope [get_scopes -regex "/apatb_${project_name}_axi_top/AESL_inst_${project_name}_axi/${project_name}_U0.*"]
+                    set scopes [get_scopes -regexp {layer(\d*)_.*data_0_V_U.*}]
+                    append scopes { }
+                    current_scope "/apatb_${project_name}_axi_top/AESL_inst_${project_name}_axi"
+                    append scopes [get_scopes -regexp {(in_local_V_data.*_0_.*)}]
+                    append scopes { }
+                    append scopes [get_scopes -regexp {(out_local_V_data.*_0_.*)}]
+                } else {
+                    current_scope [get_scopes -regex "/apatb_${project_name}_top/AESL_inst_${project_name}"]
+                    set scopes [get_scopes -regexp {layer(\d*)_.*data_0_V_U.*}]
+                }
+                open_vcd fifo_opt.vcd
+                foreach scope $scopes {
+                    current_scope $scope
+                    if {[catch [get_objects usedw]] == 0} {
+                        puts "$scope skipped"
+                        continue
+                    }
+                    set usedw [get_objects usedw]
+                    set depth [get_objects DEPTH]
+                    add_wave $usedw
+                    log_vcd $usedw
+                    log_wave $usedw
+                    add_wave $depth
+                    log_vcd $depth
+                    log_wave $depth
+                }
+            }
         }
 
         if {[string equal "$line" "quit"]} {
             set line {flush_vcd
-close_vcd
-quit
-}
+                close_vcd
+                quit
+            }
         }
         # then write the transformed line
         puts $out $line
@@ -111,9 +109,9 @@ quit
 }
 
 foreach arg $::argv {
-  foreach o [lsort [array names opt]] {
-    regexp "$o=+(\\w+)" $arg unused opt($o)
-  }
+    foreach o [lsort [array names opt]] {
+        regexp "$o=+(\\w+)" $arg unused opt($o)
+    }
 }
 
 proc report_time { op_name time_start time_end } {
@@ -149,13 +147,13 @@ set CSIM_RESULTS "./tb_data/csim_results.log"
 set RTL_COSIM_RESULTS "./tb_data/rtl_cosim_results.log"
 
 if {$opt(reset)} {
-  open_project -reset ${myproject}_prj
+  open_project -reset ${project_name}_prj
 } else {
-  open_project ${myproject}_prj
+  open_project ${project_name}_prj
 }
-set_top ${myproject}
-add_files ${myproject}.cpp -cflags "-std=c++0x"
-add_files -tb ${myproject}_test.cpp -cflags "-std=c++0x -I/usr/include/x86_64-linux-gnu -B/usr/lib/x86_64-linux-gnu"
+set_top ${project_name}
+add_files ${project_name}.cpp -cflags "-std=c++0x"
+add_files -tb ${project_name}_test.cpp -cflags "-std=c++0x -I/usr/include/x86_64-linux-gnu -B/usr/lib/x86_64-linux-gnu"
 add_files -tb weights
 add_files -tb tb_data
 if {$opt(reset)} {
@@ -165,10 +163,10 @@ if {$opt(reset)} {
 }
 # catch {config_array_partition -maximum_size 4096}
 config_compile -name_max_length 60
-set_part {xcu55c-fsvh2892-2L-e}
+set_part $part
 config_schedule -enable_dsp_full_reg=false
-create_clock -period 3.33 -name default
-set_clock_uncertainty 0.42
+create_clock -period $clock_period -name default
+set_clock_uncertainty $clock_unc
 
 if {$opt(csim)} {
   puts "***** C SIMULATION *****"
@@ -189,7 +187,7 @@ if {$opt(synth)} {
 if {$opt(cosim)} {
   puts "***** C/RTL SIMULATION *****"
   # TODO: This is a workaround (Xilinx defines __RTL_SIMULATION__ only for SystemC testbenches).
-    add_files -tb ${myproject}_test.cpp -cflags "-std=c++0x -DRTL_SIM -I/usr/include/x86_64-linux-gnu -B/usr/lib/x86_64-linux-gnu"
+    add_files -tb ${project_name}_test.cpp -cflags "-std=c++0x -DRTL_SIM -I/usr/include/x86_64-linux-gnu -B/usr/lib/x86_64-linux-gnu"
   set time_start [clock clicks -milliseconds]
 
   cosim_design -trace_level all -setup
@@ -201,16 +199,16 @@ if {$opt(cosim)} {
 
   remove_recursive_log_wave
   set old_pwd [pwd]
-  cd ${myproject}_prj/solution1/sim/verilog/
+  cd ${project_name}_prj/solution1/sim/verilog/
   source run_sim.tcl
   cd $old_pwd
 
   set time_end [clock clicks -milliseconds]
   puts "INFO:"
   if {[string equal "$backend" "vivadoaccelerator"]} {
-    puts [read [open ${myproject}_prj/solution1/sim/report/${myproject}_axi_cosim.rpt r]]
+    puts [read [open ${project_name}_prj/solution1/sim/report/${project_name}_axi_cosim.rpt r]]
   } else {
-    puts [read [open ${myproject}_prj/solution1/sim/report/${myproject}_cosim.rpt r]]
+    puts [read [open ${project_name}_prj/solution1/sim/report/${project_name}_cosim.rpt r]]
   }
   report_time "C/RTL SIMULATION" $time_start $time_end
 }
@@ -237,7 +235,7 @@ if {$opt(export)} {
 
 if {$opt(vsynth)} {
   puts "***** VIVADO SYNTHESIS *****"
-  if {[file exist ${myproject}_prj/solution1/syn/vhdl]} {
+  if {[file exist ${project_name}_prj/solution1/syn/vhdl]} {
     set time_start [clock clicks -milliseconds]
     exec vivado -mode batch -source vivado_synth.tcl >@ stdout
     set time_end [clock clicks -milliseconds]
