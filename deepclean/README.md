@@ -1,4 +1,4 @@
-# hls4ml on AWS FPGA Developer AMI v1.8.x (HLS C/C++ Kernel)
+# DeepClean on NRP U55Cs
 
 Setup tools, licenses, check connection to FPGA card
 
