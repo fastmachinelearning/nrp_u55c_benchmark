@@ -31,6 +31,7 @@
 //hls-fpga-machine-learning insert bram
 
 #define CHECKPOINT 5000
+#define N_SAMPLES 10
 
 namespace nnet {
     bool trace_enabled = true;
@@ -105,19 +106,21 @@ int main(int argc, char **argv)
   } else {
     std::cout << "INFO: Unable to open input/predictions file, using default input." << std::endl;
 
-    //hls-fpga-machine-learning insert zero
-    hls::stream<input_t> input_conv_input("input_conv_input");
-    nnet::fill_zero<input_t, N_INPUT_1_1*N_INPUT_2_1>(input_conv_input);
-    hls::stream<result_t> layer38_out("layer38_out");
+    for (int j=0; j < N_SAMPLES; j++) {
+      //hls-fpga-machine-learning insert zero
+      hls::stream<input_t> input_conv_input("input_conv_input");
+      nnet::fill_zero<input_t, N_INPUT_1_1*N_INPUT_2_1>(input_conv_input);
+      hls::stream<result_t> layer38_out("layer38_out");
 
-    //hls-fpga-machine-learning insert top-level-function
-    ereg_v1(input_conv_input,layer38_out);
+      //hls-fpga-machine-learning insert top-level-function
+      ereg_v1(input_conv_input,layer38_out);
 
-    //hls-fpga-machine-learning insert output
-    nnet::print_result<result_t, N_OUTPUTS_38*N_FILT_38>(layer38_out, std::cout, true);
+      //hls-fpga-machine-learning insert output
+      nnet::print_result<result_t, N_OUTPUTS_38*N_FILT_38>(layer38_out, std::cout, true);
 
-    //hls-fpga-machine-learning insert tb-output
-    nnet::print_result<result_t, N_OUTPUTS_38*N_FILT_38>(layer38_out, fout);
+      //hls-fpga-machine-learning insert tb-output
+      nnet::print_result<result_t, N_OUTPUTS_38*N_FILT_38>(layer38_out, fout);
+    }
 
   }
 
