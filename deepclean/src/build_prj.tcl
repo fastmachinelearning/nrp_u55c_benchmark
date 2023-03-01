@@ -3,13 +3,13 @@
 #################
 array set opt {
   reset      0
-  csim       0
+  csim       1
   synth      1
-  cosim      0
-  validation 0
-  export     1
-  vsynth     1
-  fifo_opt   0
+  cosim      1
+  validation 1
+  export     0
+  vsynth     0
+  fifo_opt   1
 }
 
 set tcldir [file dirname [info script]]
@@ -163,11 +163,12 @@ if {$opt(reset)} {
 } else {
   open_solution "solution1" -flow_target "vitis"
 }
-catch {config_array_partition -maximum_size 4096}
+# catch {config_array_partition -maximum_size 4096}
 config_compile -name_max_length 60
 set_part {xcu55c-fsvh2892-2L-e}
-create_clock -period 5 -name default
-
+config_schedule -enable_dsp_full_reg=false
+create_clock -period 3.33 -name default
+set_clock_uncertainty 0.42
 
 if {$opt(csim)} {
   puts "***** C SIMULATION *****"
@@ -188,7 +189,7 @@ if {$opt(synth)} {
 if {$opt(cosim)} {
   puts "***** C/RTL SIMULATION *****"
   # TODO: This is a workaround (Xilinx defines __RTL_SIMULATION__ only for SystemC testbenches).
-    add_files -tb ${myproject}_test.cpp -cflags "-std=c++0x -DRTL_SIM"
+    add_files -tb ${myproject}_test.cpp -cflags "-std=c++0x -DRTL_SIM -I/usr/include/x86_64-linux-gnu -B/usr/lib/x86_64-linux-gnu"
   set time_start [clock clicks -milliseconds]
 
   cosim_design -trace_level all -setup
