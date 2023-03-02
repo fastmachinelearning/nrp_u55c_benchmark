@@ -15,6 +15,53 @@
         "code",
         "ideas",
         "fundingFinding"
+      ],
+    },
+    {
+      "login": "drankincms",
+      "name": "drankincms",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6116300?v=4",
+      "profile": "https://github.com/drankincms",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jmduarte",
+      "name": "Javier Duarte",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4932543?v=4",
+      "profile": "https://jduarte.physics.ucsd.edu",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "selwyn96",
+      "name": "Selwyn Gomes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31563706?v=4",
+      "profile": "https://selwyn96.github.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Jonathan-Shoemaker",
+      "name": "Jonathan-Shoemaker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66969627?v=4",
+      "profile": "https://github.com/Jonathan-Shoemaker",
+      "contributions": [
+        "code"
+        ]
+    },
+    {
+      "login": "vloncar",
+      "name": "Vladimir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29201053?v=4",
+      "profile": "https://github.com/vloncar",
+      "contributions": [
+        "code",
+        "question",
+        "ideas"
       ]
     }
   ],
