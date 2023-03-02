@@ -3,6 +3,8 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+Navigate to the corresponding subdirectories for instructions to run benchmarks.
+
 ## [FACILE](facile)
 - Paper: [arXiv:2010.08556](https://arxiv.org/abs/2010.08556)
 - Original (U250) implementation: https://github.com/drankincms/hls4ml_c/tree/alveo_facile_4cu
@@ -32,3 +34,4 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
