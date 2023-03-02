@@ -41,7 +41,7 @@ typedef std::chrono::system_clock SClock;
 #include <thread>
 #include <sstream>
 
-#define NUM_CU 1
+#define NUM_CU 2
 #define NBUFFER 64
 
 #define STRINGIFY2(var) #var
