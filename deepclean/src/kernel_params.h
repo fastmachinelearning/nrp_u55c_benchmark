@@ -7,12 +7,11 @@
 //===============
 
 //Input has 21 channels with each channel 8192
-#define INPUT_STREAM_LEN  (N_INPUT_1_1*N_INPUT_2_1)
+#define INPUT_STREAM_LEN  8192
 
 //===============
 //Output
-//===============
-#define OUT_STREAM_LEN N_OUTPUTS_38  
+//=============== 
+#define OUT_STREAM_LEN 256    
 
-typedef ap_fixed<16,2> bigdata_t;
-
+typedef ap_uint<512>    bigdata_t;

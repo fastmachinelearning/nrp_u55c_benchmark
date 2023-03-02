@@ -63,7 +63,7 @@ extern "C" {
     #pragma HLS INTERFACE s_axilite port=return bundle=control
     #pragma HLS DATAFLOW
 
-        
+
     bigdata_t in_buff[INPUT_STREAM_LEN];
     bigdata_t out_buf[OUT_STREAM_LEN];
 
@@ -82,36 +82,37 @@ extern "C" {
     //=============================================
     //input
     //=============================================
+    for (int i = 0; i < INPUT_STREAM_LEN/result_t::size; i++) {
+      #pragma HLS PIPELINE
+      input_t ctype;
+    for(int i0 = 0; i0 < result_t::size; i0++) { 
         
-    for(unsigned i = 0; i < INPUT_STREAM_LEN / input_t::size; ++i) {
-        input_t ctype;
-        for(unsigned j = 0; j < input_t::size; j++) {
-            bigdata_t in_val = in[i * input_t::size + j];
-            ctype[j] = typename input_t::value_type(in_val);
-        }
-        in_stream.write(ctype);
-    }
+      ctype[i0] = in_buff[i].range(16*(i0+1)-1,16*i0);
+      }
+     in_stream.write(ctype);
+    }   
     hls4ml: MYPROJ(in_stream,out_stream);
       
     //=============================================
     //output
     //=============================================
-    for(unsigned i1 = 0; i1 < OUT_STREAM_LEN / result_t::size; ++i1) {
-        result_t ctype = out_stream.read();
-        out_buf[i1]=bigdata_t(ctype[0]);
-        for(unsigned j1 = 0; j1 < result_t::size; j1++) {
-            out_buf[i1 * result_t::size + j1] = ctype[j1];
+        
+    for(unsigned i1 = 0; i1 < OUT_STREAM_LEN; ++i1) {
+        #pragma HLS PIPELINE
+        bigdata_t tmp;
+        for(unsigned j1 = 0; j1 < 32; j1++) {
+            result_t ctype = out_stream.read();
+            tmp((j1+1)*16-1,(j1)*16) = ctype[0];
         }
+       out_buf[i1]=tmp;
     }
         
    for(int i2 = 0; i2 < OUT_STREAM_LEN; i2++) {
        out[i2]= out_buf[i2];
     }
 }
-}
-
-
     
+}
 
 
 
