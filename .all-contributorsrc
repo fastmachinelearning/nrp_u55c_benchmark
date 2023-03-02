@@ -32,6 +32,26 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Jonathan-Shoemaker",
+      "name": "Jonathan-Shoemaker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66969627?v=4",
+      "profile": "https://github.com/Jonathan-Shoemaker",
+      "contributions": [
+        "code"
+        ]
+    },
+    {
+      "login": "vloncar",
+      "name": "Vladimir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29201053?v=4",
+      "profile": "https://github.com/vloncar",
+      "contributions": [
+        "code",
+        "question",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
