@@ -37,6 +37,18 @@ typedef std::chrono::high_resolution_clock Clock;
 #define STRINGIFY(var) STRINGIFY2(var)
 
 
+static uint64_t get_duration_ns(const std::vector<cl::Event>& events) {
+    uint64_t duration = 0;
+    for (size_t i=0; i<events.size(); i++) {
+        uint64_t start, end;
+        events[i].getProfilingInfo<uint64_t>(CL_PROFILING_COMMAND_START, &start);
+        events[i].getProfilingInfo<uint64_t>(CL_PROFILING_COMMAND_END, &end);
+        duration += end - start;
+    }
+    return duration;
+}
+
+
 int main(int argc, char** argv)
 {
 
@@ -138,7 +150,7 @@ int main(int argc, char** argv)
    std::vector<float> in;
    for (int istream = 0; istream < INPUT_STREAM_LEN; istream++) {
             // Create the test data if no data files found or if end of files has been reached
-      	        in.push_back(istream*12.37);
+               in.push_back(0);
             }
 
 	//Send into FPGA's DRAM
@@ -147,9 +159,11 @@ int main(int argc, char** argv)
 		//std::cout<<(double)in[i0]<<std::endl;
 	}
 	//Reset the output result
-	for(int j = 0 ; j < 2 ; j++){
+	for(int j = 0 ; j < OUT_STREAM_LEN ; j++){
 		source_hw_results[j] = 0;
 	}
+	  
+        std::vector<cl::Event> events_enqueueTask(1);
         t1 = Clock::now();
         // Copy input data to device global memory
         std::cout << "before loading buffer!\n";
@@ -158,7 +172,7 @@ int main(int argc, char** argv)
         // For HLS kernels global and local size is always (1,1,1). So, it is recommended
         // to always use enqueueTask() for invoking HLS kernel
         std::cout << "before inference!\n";
-        q.enqueueTask(krnl_aws_hls4ml);
+        q.enqueueTask(krnl_aws_hls4ml,NULL,&events_enqueueTask[0]);
         // Copy Result from Device Global Memory to Host Local Memory
         std::cout << "before loading back results!\n";
         q.enqueueMigrateMemObjects({buffer_output},CL_MIGRATE_MEM_OBJECT_HOST);
@@ -166,12 +180,17 @@ int main(int argc, char** argv)
         q.finish();
         t2 = Clock::now();
         std::cout << "FPGA time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() << " ns" << std::endl;
-//         for(int i=0;i<OUT_STREAM_LEN ;i++){
-//         std::cout << source_hw_results[i]<< " ";
-//         }
-//         std::cout << std::endl;
-//         std::cout<<"---- END EVENT "<<" ----"<<std::endl;
-        
+
+        auto duration_ns = get_duration_ns(events_enqueueTask);
+
+	std::cout << "kernel time: " << duration_ns << " ns" << std::endl;
+
+	for(int i=0;i<OUT_STREAM_LEN ;i++){
+	  std::cout << source_hw_results[i]<< " ";
+	}
+	std::cout << std::endl;
+	std::cout<<"---- END EVENT "<<" ----"<<std::endl;
+	 
 
 	return EXIT_SUCCESS;
 }
