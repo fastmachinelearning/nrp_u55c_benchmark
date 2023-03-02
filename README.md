@@ -7,3 +7,5 @@
 ## [DeepClean](deepclean)
 - Paper: [arXiv:2005.06534](https://arxiv.org/abs/2005.06534)
 - Original (U250) implementation: https://github.com/Jonathan-Shoemaker/deep_clean_fpga
+
+Navigate to the corresponding subdirectories for instructions to run benchmarks.
