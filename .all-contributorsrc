@@ -7,6 +7,17 @@
   "commitConvention": "angular",
   "contributors": [
     {
+      "login": "violatingcp",
+      "name": "Philip Harris",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5166561?v=4",
+      "profile": "https://github.com/violatingcp",
+      "contributions": [
+        "code",
+        "ideas",
+        "fundingFinding"
+      ],
+    },
+    {
       "login": "drankincms",
       "name": "drankincms",
       "avatar_url": "https://avatars.githubusercontent.com/u/6116300?v=4",
