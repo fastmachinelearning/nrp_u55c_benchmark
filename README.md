@@ -4,6 +4,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Navigate to the corresponding subdirectories for instructions to run benchmarks.
+Container and K8 configuration: https://gitlab.nrp-nautilus.io/nrp/u55c-desktop/
 
 ## [FACILE](facile)
 - Paper: [arXiv:2010.08556](https://arxiv.org/abs/2010.08556)
