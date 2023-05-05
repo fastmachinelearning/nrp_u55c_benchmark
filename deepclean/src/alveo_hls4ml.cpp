@@ -64,9 +64,6 @@ extern "C" {
     #pragma HLS DATAFLOW
 
 
-    bigdata_t in_buff[INPUT_STREAM_LEN];
-    bigdata_t out_buf[OUT_STREAM_LEN];
-
     hls::stream<input_t> in_stream;
     hls::stream<result_t> out_stream;
     //these will get partitioned properly in the hls4ml code
@@ -74,10 +71,6 @@ extern "C" {
     #pragma HLS STREAM   variable=in_stream  depth=8192
     #pragma HLS STREAM   variable=out_stream depth=8192
 
-    //getting data from DRAM
-    for (int i = 0; i < INPUT_STREAM_LEN; i++) {
-        in_buff[i] = in[i];
-    }
 
     //=============================================
     //input
@@ -87,7 +80,7 @@ extern "C" {
       input_t ctype;
     for(int i0 = 0; i0 < result_t::size; i0++) { 
         
-      ctype[i0] = in_buff[i].range(16*(i0+1)-1,16*i0);
+      ctype[i0] = in[i].range(16*(i0+1)-1,16*i0);
       }
      in_stream.write(ctype);
     }   
@@ -104,12 +97,9 @@ extern "C" {
             result_t ctype = out_stream.read();
             tmp((j1+1)*16-1,(j1)*16) = ctype[0];
         }
-       out_buf[i1]=tmp;
+       out[i1]=tmp;
     }
-        
-   for(int i2 = 0; i2 < OUT_STREAM_LEN; i2++) {
-       out[i2]= out_buf[i2];
-    }
+
 }
     
 }
